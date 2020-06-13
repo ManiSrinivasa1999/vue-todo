@@ -1,55 +1,46 @@
 <template>
   <div class="container">
-    <section class="hero">
-      <div class="hero-body">
-        <div class="columns">
-          <div class="column is-6">
-            <div class="field has-addons">
-              <div class="control is-expanded has-icons-left">
-                <input
-                  class="input is-rounded"
-                  type="text"
-                  placeholder="Add your task to todo"
-                  v-on:keyup.enter="addTaskToTodo"
-                >
-                <span class="icon is-small is-left">
-                  <i class="fas fa-list"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="columns">
-          <div class="column col-height">
-            Todo
-            <ul>
-              <li
-                v-for="(todo , index) in todos"
-                :key="index"
-              >
-                <div class="card">
-                  <div class="card-header">
-                    {{ text.value }}
-                  </div>
-                  <div class="card-footer"></div>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <div class="column col-height">
-            Ongoing
-          </div>
-          <div class="column col-height">
-            Complete
-          </div>
+    <div class="columns">
+      <div class="column is-6">
+        <div class="control">
+          <input
+            class="input is-focused"
+            type="text"
+            placeholder="Add tasks to todo"
+            v-on:keyup.enter="addTodo"
+          >
         </div>
       </div>
-    </section>
+    </div>
+    <div class="columns">
+      <div class="column col-height">
+        Todo
+        <div
+          v-for="(todo, index) in todos"
+          :key="index"
+          class="card"
+        >
+          <div class="card-content">
+            {{ text }}
+          </div>
+          <footer class="card-footer">
+            <a class="card-footer-item">Ongoing</a>
+            <a class="card-footer-item">Complete</a>
+            <a class="card-footer-item">Delete</a>
+          </footer>
+        </div>
+      </div>
+      <div class="column col-height">
+        Ongoing
+      </div>
+      <div class="column col-height">
+        Complete
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-// import { dom } from '@fortawesome/vue-fontawesome';
 import 'bulma';
 
 export default {
@@ -63,27 +54,18 @@ export default {
     };
   },
   methods: {
-    addTaskToTodo(event) {
+    addTodo(event) {
       const text = event.target.value;
       this.todos.push({ text });
-      text.value = '';
+      // eslint-disable-next-line no-param-reassign
+      event.target.value = '';
     },
   },
 };
-</script>>
+</script>
 
-<style lang="scss" scoped>
-.profile-picture {
-  max-height: 48px;
-}
-
+<style>
 .col-height {
-  height: 50vmin;
+  height: 75vmin;
 }
-
-h1 {
-font-family: 'Sriracha', cursive;
-}
-
-@import url('https://fonts.googleapis.com/css2?family=Metal+Mania&display=swap');
 </style>
