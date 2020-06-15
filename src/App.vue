@@ -13,14 +13,37 @@
           <div class="navbar-end">
             <div
               v-if="$store.state.user"
-              class="navbar-item"
+              class="navbar-item has-dropdown is-hoverable"
             >
               <figure class="image is-48x48">
                 <img
                   class="is-rounded  profile-picture"
-                  src="https://bulma.io/images/placeholders/128x128.png"
+                  :src="$store.state.user.photoURL"
                 >
               </figure>
+              <div class="navbar-dropdown is-right">
+                <p class="navbar-item">
+                  {{ $store.state.user.displayName }}
+                </p>
+                <p class="navbar-item">
+                  {{ $store.state.user.email }}
+                </p>
+                <a class="navbar-item"
+                  @click="logout()"
+                >
+                  Logout
+                </a>
+              </div>
+            </div>
+            <div
+              v-else
+              class="navbar-item"
+            >
+              <router-link
+                to="/login"
+              >
+                Login
+              </router-link>
             </div>
           </div>
         </nav>
@@ -36,14 +59,20 @@
 </template>
 
 <script>
-// import { dom } from '@fortawesome/vue-fontawesome';
 import 'bulma';
+import firebase from 'firebase/app';
 
 export default {
   data() {
     return {
 
     };
+  },
+  methods: {
+    logout() {
+      firebase.auth().signOut();
+      this.user = null;
+    },
   },
 };
 </script>>

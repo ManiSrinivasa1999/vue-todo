@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       user: null,
-      db: firebase.firestore,
+      db: firebase.firestore(),
     };
   },
   mounted() {
@@ -55,19 +55,16 @@ export default {
         this.users = users;
         firebase.auth().onAuthStateChanged((user) => {
           if (user) {
-            for (let i = 0; i < this.users.length; i += 1) {
-              if (this.users[i].email === user.email) {
-                this.user = user;
-                this.$store.commit('setUser', user);
-                return;
-              }
-            }
+            this.user = user;
+            this.$store.commit('setUser', user);
+            this.$router.push('/');
           } else {
             ui.start('#firebaseui-auth-container', {
               signInOptions: [
                 firebase.auth.GoogleAuthProvider.PROVIDER_ID,
                 firebase.auth.PhoneAuthProvider.PROVIDER_ID,
               ],
+              signInSuccessUrl: '',
               // Other config options...
             });
           }
