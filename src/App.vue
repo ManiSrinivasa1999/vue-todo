@@ -4,36 +4,46 @@
       <div class="hero-head">
         <div class="navbar">
           <div class="navbar-start">
-            <h1 class="is-size-1">
-              <strong>
-                <router-link
-                  to="/home"
-                >
-                  TODO
-                </router-link>
-              </strong>
-            </h1>
+            <div class="navbar-brand">
+              <h1 class="is-size-1">
+                <strong>TODO</strong>
+              </h1>
+            </div>
           </div>
-          <div class="navbar-menu">
-            <div class="navbar-end">
-              <div
-                v-if="user"
-                class="navbar-item has-dropdown is-hoverable"
-              >
-                <a class="navbar-link">
-                  <figure class="image is-32x32">
-                    <img class="is-rounded" :src="user.photoURL">
-                  </figure>
+          <div class="navbar-end">
+            <div
+              v-if="$store.state.user"
+              class="navbar-item has-dropdown is-hoverable"
+            >
+              <figure class="image is-48x48">
+                <img
+                  class="is-rounded  profile-picture"
+                  :src="$store.state.user.photoURL"
+                >
+              </figure>
+              <div class="navbar-dropdown is-right">
+                <p class="navbar-item">
+                  {{ $store.state.user.displayName }}
+                </p>
+                <p class="navbar-item">
+                  {{ $store.state.user.email }}
+                </p>
+                <a class="navbar-item"
+                  @click="logout()"
+                >
+                  Logout
                 </a>
-
-                <div class="navbar-dropdown is-right">
-                  <a class="navbar-item"
-                    @click="logout()"
-                  >
-                    Logout
-                  </a>
-                </div>
               </div>
+            </div>
+            <div
+              v-else
+              class="navbar-item"
+            >
+              <router-link
+                to="/login"
+              >
+                Login
+              </router-link>
             </div>
           </div>
         </div>
@@ -79,19 +89,9 @@
 </template>
 
 <script>
-import { dom } from '@fortawesome/fontawesome-svg-core';
 import 'bulma';
+import { dom } from '@fortawesome/fontawesome-svg-core';
 import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
-import 'firebaseui/dist/firebaseui.css';
-import { firebaseConfig } from './config';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const firebaseui = require('firebaseui');
-
-firebase.initializeApp(firebaseConfig);
-const ui = new firebaseui.auth.AuthUI(firebase.auth());
 
 export default {
   mounted() {
@@ -119,14 +119,7 @@ export default {
             }
             this.logout();
           } else {
-            ui.start('#firebaseui-auth-container', {
-              signInOptions: [
-                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-              ],
-              // signInSuccessUrl: 'src/home',
-              // Other config options...
-            });
+            this.$router.push('/login');
           }
         });
       });
@@ -144,10 +137,13 @@ export default {
       db: firebase.firestore(),
     };
   },
-
 };
-</script>
+</script>>
 
-<style>
+<style lang="scss" scoped>
+
+.profile-picture {
+  max-height: 48px;
+}
 
 </style>
